@@ -230,13 +230,17 @@ Local $custom = 0
 If FileExists($pth & "\PDF-Xchange Viewer Settings.dat") Then $custom = 2
 If FileExists(@ScriptDir & "\PDF-Xchange Viewer Settings.dat") Then $custom = 1
 
-; extract PDFXChange Viewer and settings.dat and qpdf28.dll ... to %temp% directory.
-Local $myDir = @TempDir & "\PDFPrinterTmp"
-DirCreate($myDir)
-$tmp = FileInstall(".\PDFXCview.exe", $myDir & "\PDFXCview.exe")
-FileInstall(".\qpdf28.dll", $myDir & "\qpdf28.dll")
-FileInstall(".\resource.dat", $myDir & "\resource.dat", 1)
-FileDelete($myDir & "\settings.dat")
+Local $myDir = @ScriptDir & "\PDFPrinterTmp"
+; if PDFXchange Viewer is available in script directory, use it.
+If Not FileExists($myDir) Then
+	; extract PDFXChange Viewer and settings.dat and qpdf28.dll ... to %temp% directory.
+	Local $myDir = @TempDir & "\PDFPrinterTmp"
+	DirCreate($myDir)
+	$tmp = FileInstall(".\PDFXCview.exe", $myDir & "\PDFXCview.exe")
+	FileInstall(".\qpdf28.dll", $myDir & "\qpdf28.dll")
+	FileInstall(".\resource.dat", $myDir & "\resource.dat", 1)
+	FileDelete($myDir & "\settings.dat")
+EndIf
 
 ; next lines fixed by Wilberto Morales
 If $custom = 1 Then
